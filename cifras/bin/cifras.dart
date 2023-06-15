@@ -74,6 +74,27 @@ String encode({required String text, required String key}) {
   return encode.join();
 }
 
+//Receba o texto a ser criptografado e a chave de criptografia.
+String encodeRecusivo({required String text, required String key}) {
+  List<String> encode = <String>[];
+
+  for (var i = 0; i < text.length; i++) {
+    if (isalphabet(text[i])) {
+      var posText = text.codeUnitAt(i);
+      var posKey = key.codeUnitAt(i);
+      var sumPos = ((posKey + posText) % numLetters) + 'A'.codeUnits[0];
+      // print('posKey: $posKey');
+      // print('posText: $posText');
+      // print('sum: $sumPos');
+      encode.add(String.fromCharCode(sumPos));
+    } else {
+      encode.add(text[i]);
+    }
+  }
+
+  return encode.join();
+}
+
 //Receba a o texto criptografado e a chave.
 //Executar a decriptografica do texto que foi encodado com a Key
 String decode({required String textEncode, required String key}) {
@@ -116,7 +137,7 @@ String generateKey({required lenth}) {
   var t = List.generate(
       lenth,
       (index) => (String.fromCharCode(
-          initAscPos + random.nextInt(endAscPos - initAscPos))));
+          initAscPos + random.nextInt(/*endAscPos - initAscPos*/ 128))));
 
   return t.join();
 }
